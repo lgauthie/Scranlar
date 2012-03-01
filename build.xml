@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<project name="gnar-gran" default="build" basedir=".">
+  <description>Project Build Script</description>
+ 
+  <!-- targets -->
+  <target name="build" depends="package" description="Build whole project"/>
+ 
+  <target name="clean" depends="init" description="Remove previous build files">
+    <delete dir="${build.dir}" includeemptydirs="true" quiet="true"/>
+  </target>
+ 
+  <target name="init">
+    <property environment="env"/>
+ 
+    <!-- variables for paths and files -->
+    <property name="res.dir" location="${basedir}/res">
+    <property name="src.dir" location="${basedir}/src"/>
+    <property name="build.dir" location="${basedir}/build"/>
+    <property name="build-classes.dir" location="${build.dir}/classes"/>
+    <property name="build-lib.dir" location="${build.dir}/lib"/>
+    <property name="build-doc.dir" location="${build.dir}/doc"/>
+    <property name="java.dir" location="/usr/share/java"/>
+    <property name="scala.dir" location="/usr/share/scala"/>
+    <property name="scala-library.jar" location="${scala.dir}/lib/scala-library.jar"/>
+    <property name="scala-compiler.jar" location="${scala.dir}/lib/scala-compiler.jar"/>
+ 
+    <path id="project.classpath">
+      <pathelement location="${scala-library.jar}"/>
+      <pathelement location="${build-classes.dir}"/> <!-- used during recompilation -->
+    </path>
+ 
+    <path id="scala.classpath">
+      <pathelement location="${scala-compiler.jar}"/>
+      <pathelement location="${scala-library.jar}"/>
+    </path>	
+ 
+    <!-- load scala's ant tasks -->
+    <taskdef resource="scala/tools/ant/antlib.xml" classpathref="scala.classpath"/>
+ 
+    <!-- print where this project will get scala and java from -->
+    <echo message="Init project"/>
+    <echo message=" with scala.dir = ${scala.dir}"/>
+    <echo message=" with java.dir = ${java.dir}"/>
+ 
+    <!-- check if any files has been modified since last build -->
+    <uptodate property="build.uptodate" targetfile="${build.dir}/build.done">
+      <srcfiles dir= "${src.dir}" includes="**"/>
+      <srcfiles dir= "${lib.dir}" includes="**"/>
+    </uptodate>
+  </target>
+ 
+  <target name="compile" depends="init" unless="build.uptodate">
+    <mkdir dir="${build-classes.dir}"/>
+    <scalac
+      destdir="${build-classes.dir}"
+      classpathref="project.classpath">
+      <include name="**/*.scala"/>
+      <src><pathelement location="${src.dir}"/></src>
+    </scalac>
+  </target>
+ 
+  <target name="doc" depends="compile" unless="build.uptodate">
+    <mkdir dir="${build-doc.dir}"/>
+    <scaladoc
+      srcdir="${src.dir}"
+      destdir="${build-doc.dir}"
+      doctitle="Project API documentation"
+      classpathref="project.classpath">
+      <include name="**/*.scala"/>
+    </scaladoc>
+  </target>
+ 
+  <target name="package" depends="doc" unless="build.uptodate">
+    <mkdir dir="${build-lib.dir}"/>
+    <jar destfile="${build-lib.dir}/project.jar">
+      <fileset dir="${build-classes.dir}"/>
+    </jar>
+    <jar destfile="${build-lib.dir}/project-src.jar">
+      <fileset dir="${src.dir}" includes="**/*.scala"/>
+    </jar>
+    <jar destfile="${build-lib.dir}/project-doc.jar">
+      <fileset dir="${build-doc.dir}"/>
+    </jar>
+    <touch file="${build.dir}/build.done"/> <!-- mark build as up-to-date -->
+  </target>
+</project>
