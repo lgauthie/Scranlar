@@ -12,23 +12,45 @@ import javax.sound.sampled.DataLine
 import javax.sound.sampled.LineUnavailableException
 import javax.sound.sampled.SourceDataLine
 
+/** Granulator
+ *
+ *
+ */
 object Granulator {
-  val strSource = "cat_meow_x.wav"
   val EXTERNAL_BUFFER_SIZE = 128000 
 
+  /** main
+   *
+   *
+   */
   def main(args: Array[String]) {
 
+    val audioInputStream = openAudioFile("cat_meow_x.wav")
+    val audioFormat = audioInputStream.getFormat()
+    play(audioInputStream, audioFormat)
+  }
+
+  /** openAudioFile
+   *
+   *
+   */
+  def openAudioFile(strSource:String) = {
     val file = new File(strSource)
     var audioInputStream: AudioInputStream = null 
     try {
       audioInputStream = AudioSystem.getAudioInputStream(file)
+      println("File Opened")
     }catch{
       case e: Exception => e.printStackTrace();
     }
-    println("File Opened")
-    val audioFormat = audioInputStream.getFormat()
-    var info = new DataLine.Info(classOf[SourceDataLine], audioFormat)
+    audioInputStream
+  }
 
+  /** play 
+   *
+   */
+  def play(audioInputStream:AudioInputStream, audioFormat:AudioFormat) = {
+    var info = new DataLine.Info(classOf[SourceDataLine], audioFormat)
     val line = AudioSystem.getLine(info).asInstanceOf[SourceDataLine]
     /*
       The line is there, but it is not yet ready to
@@ -40,28 +62,21 @@ object Granulator {
     val abData = new Array[Byte](EXTERNAL_BUFFER_SIZE) 
     while (nBytesRead != -1) {
       try{
-        println("Tried Something")
         nBytesRead = audioInputStream.read(abData, 0, abData.length)
       }catch{
         case ioe: IOException => ioe.printStackTrace()
       }
       if (nBytesRead >= 0){
-        val nBytesWritten = line.write(abData, 0, nBytesRead)
+        line.write(abData, 0, nBytesRead)
       }
     }
     /*
-      Wait until all data are played.
-      This is only necessary because of the bug noted below.
-      (If we do not wait, we would interrupt the playback by
-      prematurely closing the line and exiting the VM.)
-     
-      Thanks to Margie Fitch for bringing me on the right
-      path to this solution.
+      Wait until all the data is played.
     */
     line.drain();
 
     /*
-      All data are played. We can close the shop.
+      All data are played. Time to close 
     */
     line.close();
   }
