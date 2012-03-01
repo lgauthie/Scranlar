@@ -24,8 +24,13 @@ object Granulator {
    *
    */
   def main(args: Array[String]) {
+    var fileName:String = null
 
-    val audioInputStream = openAudioFile("cat_meow_x.wav")
+    args.foreach{ arg =>
+      fileName = arg
+    }
+
+    val audioInputStream = openAudioFile(fileName)
     val audioFormat = audioInputStream.getFormat()
     //TODO: Copy input into an Array[Byte]
     //TODO: Make play take in an Array[Byte] and play it.
