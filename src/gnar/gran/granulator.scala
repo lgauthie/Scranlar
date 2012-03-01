@@ -27,6 +27,8 @@ object Granulator {
 
     val audioInputStream = openAudioFile("cat_meow_x.wav")
     val audioFormat = audioInputStream.getFormat()
+    //TODO: Copy input into an Array[Byte]
+    //TODO: Make play take in an Array[Byte] and play it.
     play(audioInputStream, audioFormat)
   }
 
