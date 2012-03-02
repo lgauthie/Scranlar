@@ -1,8 +1,11 @@
+package gnar.gran
+
 import javax.sound.sampled.AudioInputStream
 import java.io.InputStream
 import java.io.IOException
 import java.io.FileNotFoundException
 import java.io.File
+import java.io.ByteArrayOutputStream
 
 import javax.sound.sampled.AudioFileFormat
 import javax.sound.sampled.AudioFormat
@@ -32,7 +35,8 @@ object Granulator {
 
     val audioInputStream = openAudioFile(fileName)
     val audioFormat = audioInputStream.getFormat()
-    //TODO: Copy input into an Array[Byte]
+    val audioByteArray = audioStreamToByteArray(audioInputStream)
+
     //TODO: Make play take in an Array[Byte] and play it.
     play(audioInputStream, audioFormat)
   }
@@ -51,6 +55,24 @@ object Granulator {
       case e: Exception => e.printStackTrace();
     }
     audioInputStream
+  }
+
+  /** audioStreamToByteArry
+   *
+   *  Converts and audio stream into an Array[Byte]
+   *
+   */
+  def audioStreamToByteArray(audioInputStream:AudioInputStream) = {
+    var baos = new ByteArrayOutputStream()
+    var nBytesRead = 0
+    var abBuffer = new Array[Byte](EXTERNAL_BUFFER_SIZE)
+    while(nBytesRead != -1){
+      nBytesRead = audioInputStream.read(abBuffer)
+      if(nBytesRead >= 0){
+        baos.write(abBuffer, 0, nBytesRead)
+      }
+    }
+    baos.toByteArray()
   }
 
   /** play 
