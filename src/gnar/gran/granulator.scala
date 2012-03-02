@@ -37,8 +37,7 @@ object Granulator {
     val audioFormat = audioInputStream.getFormat()
     val audioByteArray = audioStreamToByteArray(audioInputStream)
 
-    //TODO: Make play take in an Array[Byte] and play it.
-    play(audioInputStream, audioFormat)
+    play(audioByteArray, audioFormat)
   }
 
   /** openAudioFile
@@ -67,7 +66,11 @@ object Granulator {
     var nBytesRead = 0
     var abBuffer = new Array[Byte](EXTERNAL_BUFFER_SIZE)
     while(nBytesRead != -1){
-      nBytesRead = audioInputStream.read(abBuffer)
+      try{
+        nBytesRead = audioInputStream.read(abBuffer)
+      }catch{
+        case ioe: IOException => ioe.printStackTrace()
+      }
       if(nBytesRead >= 0){
         baos.write(abBuffer, 0, nBytesRead)
       }
@@ -78,7 +81,7 @@ object Granulator {
   /** play 
    *
    */
-  def play(audioInputStream:AudioInputStream, audioFormat:AudioFormat) = {
+  def play(audioByteArray:Array[Byte], audioFormat:AudioFormat) = {
     var info = new DataLine.Info(classOf[SourceDataLine], audioFormat)
     val line = AudioSystem.getLine(info).asInstanceOf[SourceDataLine]
     /*
@@ -87,18 +90,7 @@ object Granulator {
     */
     line.open(audioFormat)
     line.start()
-    var nBytesRead = 0
-    val abData = new Array[Byte](EXTERNAL_BUFFER_SIZE) 
-    while (nBytesRead != -1) {
-      try{
-        nBytesRead = audioInputStream.read(abData, 0, abData.length)
-      }catch{
-        case ioe: IOException => ioe.printStackTrace()
-      }
-      if (nBytesRead >= 0){
-        line.write(abData, 0, nBytesRead)
-      }
-    }
+    line.write(audioByteArray, 0, audioByteArray.length)
     /*
       Wait until all the data is played.
     */
