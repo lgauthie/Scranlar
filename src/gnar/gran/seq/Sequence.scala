@@ -1,6 +1,6 @@
-package gnar.gran
+package gnar.gran.seq
 
-class Sequence {
-
+trait Sequence {
+  def synthesize()
 }
 

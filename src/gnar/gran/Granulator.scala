@@ -30,13 +30,15 @@ object Granulator {
   def main(args: Array[String]) {
     var fileName:String = null
 
-    args.foreach{ arg =>
+    args.foreach { arg =>
       fileName = arg
     }
 
     val audioInputStream = openAudioFile(fileName)
     val audioFormat = audioInputStream.getFormat()
     val audioByteArray = audioStreamToByteArray(audioInputStream)
+
+    val sequence = New DefaultSequence()
 
     play(audioByteArray, audioFormat)
   }
@@ -60,6 +62,9 @@ object Granulator {
   /** audioStreamToByteArry
    *
    *  Converts and audio stream into an Array[Byte]
+   * 
+   * @param audioInputStream the input to be converted into a Array[Byte]
+   * @return a copy of audioInputStream in Array[Byte] form
    *
    */
   def audioStreamToByteArray(audioInputStream:AudioInputStream) = {
@@ -79,27 +84,28 @@ object Granulator {
     baos.toByteArray()
   }
 
-  /** play 
+  /** plays a byte array 
+   *
+   * @param audioByteArray the byte array to be played
+   * @param audioFormat the format of the output
    *
    */
   def play(audioByteArray:Array[Byte], audioFormat:AudioFormat) = {
-    var info = new DataLine.Info(classOf[SourceDataLine], audioFormat)
+
+    val info = new DataLine.Info(classOf[SourceDataLine], audioFormat)
     val line = AudioSystem.getLine(info).asInstanceOf[SourceDataLine]
-    /*
-      The line is there, but it is not yet ready to
-      receive audio data. We have to open the line.
-    */
+
+    // The line is there, but it is not yet ready to
+    // receive audio data. We have to open the line.
     line.open(audioFormat)
     line.start()
     line.write(audioByteArray, 0, audioByteArray.length)
-    /*
-      Wait until all the data is played.
-    */
+    
+    // Wait until all the data is played.
     line.drain()
 
-    /*
-      All data are played. Time to close 
-    */
+    
+    // All data are played. Time to close 
     line.close()
   }
 }

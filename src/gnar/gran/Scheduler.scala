@@ -1,5 +1,7 @@
 package gnar.gran
 
-class Schedualer {
+class Schedualer(sequence:Sequence) {
+  def synthesize() = {
 
+  }
 }
