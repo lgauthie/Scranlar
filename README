@@ -1,0 +1,11 @@
+The start of my granular synthesizer programmed in scala. The language was chosen partly as a learning experience, and partly because I'm interested in the efficiency and dsp capabilities of the jvm but didn't feel like writing in java.
+
+Currently it has input output capabilities, but the synthesis part isn't implemented.
+
+Future plans include saving the output to a file, and possible a vst version if time allows. This would serve as a proof of concept that a vst can be programmed and run efficiently on the jvm. Some parts may need to be writtin using the JNI, but I will save that hurdle for later. 
+
+To run from command line:
+
+Granulator <File Name>
+
+Currently I have only tested with .wav files.
