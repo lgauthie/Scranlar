@@ -35,9 +35,7 @@ object Granulator {
     val audioWorkingStream = AudioSystem.getAudioInputStream(AUDIO_FORMAT,audioInputStream)
     val audioByteArray = Audio.audioStreamToByteArray(audioWorkingStream)
     val floatArray = Audio.byteArrayToFloat(audioByteArray,AUDIO_FORMAT)
-    println(floatArray.length)
     val byteArray = Audio.floatArrayToByte(floatArray,AUDIO_FORMAT)
-    println(byteArray.length)
 
     val sequence = new DefaultSequence()
 
