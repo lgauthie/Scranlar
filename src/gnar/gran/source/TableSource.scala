@@ -12,7 +12,7 @@ class TableSource(val table:Array[Float]) extends Source{
 
   /** synthesize
    * 
-   * @param time the current time
+   * @param time the current time in ms
    * @param amplitude the amplitude scaler for the sample
    * @param offset the base time offset from the grain
    *
@@ -20,6 +20,6 @@ class TableSource(val table:Array[Float]) extends Source{
    *
    */
   def synthesize(time:Int, amplitude:Float, offset:Int) = {
-    0.0f
+    table(time + offset) * amplitude
   }
 }

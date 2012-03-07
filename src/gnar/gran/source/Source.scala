@@ -11,5 +11,5 @@ trait Source {
    * @return amplitude at current time
    *
    */
-  def synthesize(time:Int, amplitude:Float, offset:Int)
+  def synthesize(time:Int, amplitude:Float, offset:Int):Float
 }

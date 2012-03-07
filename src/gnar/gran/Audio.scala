@@ -79,9 +79,9 @@ object Audio {
    * 
    * @return a float version of the input byte array
    */
-  def byteArrayToFloat(bArray:Array[Byte], af:AudioFormat) = {
+  def byteArrayToFloat(bArray:Array[Byte]) = {
     val floatBuffer = new ArrayBuffer[Float]
-    af.getFrameSize match {
+    AUDIO_FORMAT.getFrameSize match {
       // 1 byte a frame to float
       case 1 => {
         for(elem <- bArray){
@@ -110,9 +110,9 @@ object Audio {
    * 
    * @return a byte version of the input float array
    */
-  def floatArrayToByte(fArray:Array[Float], af:AudioFormat) = {
+  def floatArrayToByte(fArray:Array[Float]) = {
     val byteBuffer = new ArrayBuffer[Byte]
-    af.getFrameSize match {
+    AUDIO_FORMAT.getFrameSize match {
       // 1 byte a frame conversion from float
       case 1 => {
         for(elem <- fArray){
@@ -140,14 +140,14 @@ object Audio {
    * @param audioFormat the format of the output
    *
    */
-  def play(audioByteArray:Array[Byte], audioFormat:AudioFormat) = {
+  def play(audioByteArray:Array[Byte]) = {
 
-    val info = new DataLine.Info(classOf[SourceDataLine], audioFormat)
+    val info = new DataLine.Info(classOf[SourceDataLine], AUDIO_FORMAT)
     val line = AudioSystem.getLine(info).asInstanceOf[SourceDataLine]
 
     // The line is there, but it is not yet ready to
     // receive audio data. We have to open the line.
-    line.open(audioFormat)
+    line.open(AUDIO_FORMAT)
     line.start()
     line.write(audioByteArray, 0, audioByteArray.length)
     
