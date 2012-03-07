@@ -1,6 +1,9 @@
 package gnar.gran.seq
 
+import gnar.gran.Grain
+
 trait Sequence {
-  def synthesize()
+  def synthesize(): Int
+  def addSource(grain:Grain)
 }
 

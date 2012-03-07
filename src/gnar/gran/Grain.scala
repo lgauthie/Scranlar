@@ -1,5 +1,8 @@
 package gnar.gran
 
+import gnar.gran.source._
+import gnar.gran.env._
+
 /** Grain
  *
  * Generates grains from a source, and an envelope.
@@ -9,14 +12,14 @@ package gnar.gran
  * @param envelope the envelope for each Grain
  *
  */
-class Grain(source:Source, envelope:Envelope) {
+class Grain(val source:Source, val envelope:Envelope) {
 
   /** Synthesizes a new grain from the given source
    *
    * @return returns Array[Byte] that contains the current grain
    *
    */
-  def synthesize = {
-
+  def synthesize(length:Int) = {
+    source synthesize(1,1,1)
   }
 }
