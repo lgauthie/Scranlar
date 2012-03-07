@@ -4,8 +4,12 @@ Currently it has input output capabilities, but the synthesis part isn't impleme
 
 Future plans include saving the output to a file, and possible a vst version if time allows. This would serve as a proof of concept that a vst can be programmed and run efficiently on the jvm. Some parts may need to be writtin using the JNI, but I will save that hurdle for later. 
 
+To build make sure that your JAVA_HOME and SCALA_HOME environment variables are set. Then run ant from the root directory.
+
 To run from command line:
 
 Granulator <File Name>
 
 Currently I have only tested with .wav files.
+
+If you have any questions feel free to email lee.d.gauthier at gmail dot com.
