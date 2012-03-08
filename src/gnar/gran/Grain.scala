@@ -25,8 +25,8 @@ class Grain(val source:Source, val envelope:Envelope, val offset:Int, val len:In
   def synthesize = {
     val fArrayBuf = new ArrayBuffer[Float]
     for(i <- 0 until len){
-      //TODO: Apply Envelope to grains
-      fArrayBuf += source synthesize(i,1,offset)
+      val envVal = envelope.generateAmplitude(i)
+      fArrayBuf += source synthesize(i,envVal,offset)
     }
     fArrayBuf toArray
   }
