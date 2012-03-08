@@ -35,8 +35,12 @@ object Granulator {
     val sequence = new DefaultSequence()
 
     val sched = new Scheduler(sequence, table)
+    
+    Audio openAudio
 
     sched start
+
+    Audio closeAudio
 
     //Audio play(byteArray, AUDIO_FORMAT)
   }
