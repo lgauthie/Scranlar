@@ -24,24 +24,18 @@ object Granulator {
       fileName = arg
     }
 
-    val audioInputStream = Audio openAudioFile(fileName)
-    val audioFormat = audioInputStream getFormat()
-    val audioWorkingStream = AudioSystem getAudioInputStream(Audio AUDIO_FORMAT,audioInputStream)
-    val audioByteArray = Audio audioStreamToByteArray(audioWorkingStream)
-    val floatArray = Audio byteArrayToFloat(audioByteArray)
+    val audio = new Audio
+
+    val audioInputStream = audio openAudioFile(fileName)
+    val audioWorkingStream = AudioSystem getAudioInputStream(audio.AUDIO_FORMAT,audioInputStream)
+    val audioByteArray = audio audioStreamToByteArray(audioWorkingStream)
+    val floatArray = audio byteArrayToFloat(audioByteArray)
     val table = new TableSource(floatArray)
-    val byteArray = Audio floatArrayToByte(floatArray)
 
-    val sequence = new DefaultSequence()
+    val sequence = new SingleTableSequence(table, audio)
 
-    val sched = new Scheduler(sequence, table)
-    
-    Audio openAudio
+    val sched = new Scheduler(sequence, audio)
 
-    sched start
-
-    Audio closeAudio
-
-    //Audio play(byteArray, AUDIO_FORMAT)
+    sched synthesize
   }
 }

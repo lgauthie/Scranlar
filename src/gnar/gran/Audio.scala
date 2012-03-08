@@ -17,12 +17,12 @@ import javax.sound.sampled.SourceDataLine
 
 import collection.mutable.ArrayBuffer
 
-object Audio {
+class Audio {
 
 
   val AUDIO_FORMAT = new AudioFormat(
-    44100f, 
-    16, 
+    44100f,
+    16,
     1,
     true,
     true
