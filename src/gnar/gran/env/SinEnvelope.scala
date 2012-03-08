@@ -1,5 +1,5 @@
 package gnar.gran.env
 
-class SinEnvelope {
+class SinEnvelope extends Envelope{
 
 }
