@@ -9,14 +9,15 @@ import java.lang.System.currentTimeMillis
 
 class Scheduler(sequence:Sequence, table:TableSource) {
   val grainList = new ListBuffer[Grain]
-  val grainLengthMs = 20 
+  val grainLengthMs = 40 
   val grainLength = ((Audio.AUDIO_FORMAT.getSampleRate()) * (grainLengthMs / 1000.0f)).asInstanceOf[Int]
-  val env = new SinEnvelope()
+  val env = new SinEnvelope(grainLength)
 
   def synthesize = {
     val end = table.table.length - grainLength
     val step = grainLength
     for(i <- 0 until end by step){
+      println("Grain: " + i)
       grainList += new Grain(table,env,i,grainLength)
     }
   }
