@@ -10,6 +10,9 @@ package gnar.gran.source
  */
 class TableSource(val table:Array[Float]) extends Source{
 
+  /** The maximum Length of the source **/
+  val length = table.length
+
   /** synthesize
    * 
    * @param time the current time in ms

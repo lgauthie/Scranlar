@@ -2,6 +2,8 @@ package gnar.gran
 
 import seq._
 import source._
+import env._
+
 import javax.sound.sampled.AudioFormat
 import javax.sound.sampled.AudioSystem
 
@@ -32,7 +34,9 @@ object Granulator {
     val floatArray = audio byteArrayToFloat(audioByteArray)
     val table = new TableSource(floatArray)
 
-    val sequence = new SingleTableSequence(table, audio)
+    val sampleRate = audio.AUDIO_FORMAT.getSampleRate
+    val env = new SinEnvelope()
+    val sequence = new SingleTableSequence(table, env, sampleRate)
 
     val sched = new Scheduler(sequence, audio)
 

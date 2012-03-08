@@ -11,5 +11,6 @@ trait Source {
     * @return amplitude at current time
     *
     */
+  val length:Int
   def synthesize(time:Int, amplitude:Float, offset:Int):Float
 }

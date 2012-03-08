@@ -1,9 +1,17 @@
 package gnar.gran.seq
 
-trait Sequence {
-  def synthesize()
+import collection.mutable.ListBuffer
 
-  def generateGrainList()
+import gnar.gran.source.Source
+import gnar.gran.env.Envelope
+import gnar.gran.Grain
 
-  def silence(time:Int)
+
+trait GrainSequence {
+      //grainPool += new Grain(sequence.source,sequence.env,i,sequence.grainLength)
+  def source():Source
+  def env():Envelope
+  def grainLength():Int
+  def playBackOrder(list:ListBuffer[Grain]):Iterable[Grain]
+  def poolOrder():Iterable[Int]
 }
