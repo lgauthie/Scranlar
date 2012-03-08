@@ -9,30 +9,33 @@ import java.lang.System.currentTimeMillis
 
 class Scheduler(sequence:Sequence, table:TableSource) {
   val grainList = new ListBuffer[Grain]
-  val grainLengthMs = 80
-  val grainLength = ((Audio.AUDIO_FORMAT.getSampleRate()) * (grainLengthMs / 1000)).asInstanceOf[Int]
+  val grainLengthMs = 20 
+  val grainLength = ((Audio.AUDIO_FORMAT.getSampleRate()) * (grainLengthMs / 1000.0f)).asInstanceOf[Int]
+  val env = new SinEnvelope()
 
-  def synthesize() = {
-    var start = 0
-    for(i <- start until table.table.lenth - grainLength){
-      for(j <- 0 until grainLength){
-
-      }
+  def synthesize = {
+    val end = table.table.length - grainLength
+    val step = grainLength
+    for(i <- 0 until end by step){
+      grainList += new Grain(table,env,i,grainLength)
     }
   }
 
   def start = {
+    synthesize
+    println("len: " + grainList.length)
     grainList foreach { grain =>
-      Audio.Play(Audio.floatArrayToByte(grain.synthesize))
-      wait(grainLengthMs)
+      Audio.play(Audio.floatArrayToByte(grain.synthesize))
+      Audio.play(Audio.floatArrayToByte(silence(5)))
     }
   }
 
-  def wait(time:Int) = {
-    var t0:Long = currentTimeMillis
-    var t1:Long = currentTimeMillis
-    while(t1 - t0 < time){
-      t1 = currentTimeMillis
+  def silence(time:Int) = {
+    val end = ((Audio.AUDIO_FORMAT.getSampleRate()) * (time / 1000.0f)).asInstanceOf[Int]
+    val emptySamples = new ListBuffer[Float]
+    for(i <- 0 to time){
+      emptySamples += 0.0f
     }
+    emptySamples toArray
   }
 }
