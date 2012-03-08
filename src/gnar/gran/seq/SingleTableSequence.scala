@@ -13,18 +13,14 @@ class SingleTableSequence(val table:TableSource, val audio:Audio, grainLengthMs:
   val env = new SinEreversenvelope(grainLength)
   val grainList = new ListBuffer[Grain]
   
-  /** Plays all of the grains in the list of grains
-    *
-    **/
+  /** Plays all of the grains in the list of grains **/
   def synthesize = {
     grainList.reverse.foreach { grain =>
       audio.play(audio.floatArrayToByte(grain.synthesize))
     }
   }
 
-  /** Generates a list of grains from the input table
-    * 
-    **/
+  /** Generates a list of grains from the input table **/
   def generateGrainList = {
     val end = table.table.length - grainLength
     val step = grainLength
