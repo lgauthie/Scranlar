@@ -19,6 +19,7 @@ import collection.mutable.ArrayBuffer
 
 object Audio {
 
+
   val AUDIO_FORMAT = new AudioFormat(
     44100f, 
     16, 
@@ -26,7 +27,10 @@ object Audio {
     true,
     true
   )
-
+  
+  val info = new DataLine.Info(classOf[SourceDataLine], AUDIO_FORMAT)
+  val line = AudioSystem.getLine(info).asInstanceOf[SourceDataLine]
+  
   val EXTERNAL_BUFFER_SIZE = 128000 
 
   /** openAudioFile
@@ -141,16 +145,16 @@ object Audio {
    *
    */
   def play(audioByteArray:Array[Byte]) = {
+    line.write(audioByteArray, 0, audioByteArray.length)
+  }
 
-    val info = new DataLine.Info(classOf[SourceDataLine], AUDIO_FORMAT)
-    val line = AudioSystem.getLine(info).asInstanceOf[SourceDataLine]
-
-    // The line is there, but it is not yet ready to
-    // receive audio data. We have to open the line.
+  def openAudio() = {
     line.open(AUDIO_FORMAT)
     line.start()
-    line.write(audioByteArray, 0, audioByteArray.length)
-    
+  }
+
+  def closeAudio() = {
+
     // Wait until all the data is played.
     line.drain()
 
