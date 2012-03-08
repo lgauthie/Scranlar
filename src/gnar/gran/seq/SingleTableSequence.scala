@@ -7,22 +7,16 @@ import gnar.gran.Grain
 import gnar.gran.source._
 import gnar.gran.env._
 
-class SingleTableSequence(newSource:Source, newEnv:Envelope,
-                          sampleRate:Float, grainLengthMs:Int = 60,
-                          mode:String = "n") extends GrainSequence {
-  def source = newSource
-  def env = {
-    newEnv.lenSamples(grainLength)
-    newEnv
-  }
-  def grainLength = (sampleRate * grainLengthMs/1000).asInstanceOf[Int]
+class SingleTableSequence(source:Source, sampleRate:Float, grainLengthMs:Int = 60, mode:String = "n")
+  extends GrainSequence(source) {
+
+  def grainLength =  (sampleRate * grainLengthMs/1000).asInstanceOf[Int]
+  val env = new SinEnvelope(grainLength)
+  def envelope() = env
   
   /** Plays all of the grains in the list of grains
     *
-    * @todo should a message that says when and where the next grain appears
-    * @todo the order the grains appear
-    *
-    */
+    **/
   def playBackOrder(list:ListBuffer[Grain]) = {
     mode match{
       case "n" => list

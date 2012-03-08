@@ -28,7 +28,6 @@ class Grain(val source:Source, val envelope:Envelope, val offset:Int = 0, val le
     val fArrayBuf = new ArrayBuffer[Float]
     for(sample <- 0 until len){
       val envVal = envelope.generateAmplitude(sample)
-      val der =source.synthesize(sample,envVal,offset)
       fArrayBuf += source synthesize(sample,envVal,offset)
     }
     fArrayBuf toArray

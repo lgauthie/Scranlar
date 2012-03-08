@@ -35,8 +35,7 @@ object Granulator {
     val table = new TableSource(floatArray)
 
     val sampleRate = audio.AUDIO_FORMAT.getSampleRate
-    val env = new SinEnvelope()
-    val sequence = new SingleTableSequence(table, env, sampleRate)
+    val sequence = new SingleTableSequence(table, sampleRate)
 
     val sched = new Scheduler(sequence, audio)
 

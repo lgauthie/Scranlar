@@ -25,7 +25,7 @@ class Scheduler(sequence:GrainSequence, audio:Audio, density:Int = 0) {
   /** Generates a list of grains from the input table **/
   def generateGrainPool() = {
     for(i <- sequence.poolOrder){
-      grainPool += new Grain(sequence.source,sequence.env,i,sequence.grainLength)
+      grainPool += new Grain(sequence.source,sequence.envelope,i,sequence.grainLength)
     }
   }
 
@@ -39,7 +39,7 @@ class Scheduler(sequence:GrainSequence, audio:Audio, density:Int = 0) {
   def silence(time:Int) = {
     val end = ((audio.AUDIO_FORMAT.getSampleRate()) * (time / 1000.0f)).asInstanceOf[Int]
     val emptySamples = new ListBuffer[Float]
-    for(i <- 0 to time){
+    for(i <- 0 to end){
       emptySamples += 0.0f
     }
     emptySamples toArray
