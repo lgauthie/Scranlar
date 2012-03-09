@@ -23,7 +23,11 @@ class SingleTableSequence(source:Source, sampleRate:Float, grainLengthMs:Int = 6
       case "r" => list reverse
     }
   }
-
+  
+  /** Used to generate the order of grains in the pool
+    * 
+    * 
+    **/
   def poolOrder() = {
     val end = source.length - grainLength
     val step = grainLength
