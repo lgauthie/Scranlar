@@ -12,8 +12,10 @@ import collection.mutable.ArrayBuffer
   * @constructor construcs a grain with a source and envelope
   * @param source the source data for the Grain
   * @param envelope the envelope for each Grain
-  * @param offset some kind of offset to be passed into the srouces
-  *        sythesize method
+  * @param offset some kind of offset to be passed into the sources
+  *        sythesize method. It could be a time offset in the case of
+  *        a table method, or a frequency offset in the case of a 
+  *        synthetic method.
   * @param len the length of the grain in samples
   *
   */
