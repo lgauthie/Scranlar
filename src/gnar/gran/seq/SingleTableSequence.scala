@@ -29,7 +29,11 @@ class SingleTableSequence(source:Source, sampleRate:Float, grainLengthMs:Int = 1
       }
     }
   }
-
+  
+  /** Used to generate the order of grains in the pool
+    * 
+    * 
+    **/
   def poolOrder() = {
     println("this.poolMode " + this.poolMode)
     println("poolMode " + poolMode)
