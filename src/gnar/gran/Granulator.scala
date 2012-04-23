@@ -7,24 +7,66 @@ import env._
 import javax.sound.sampled.AudioFormat
 import javax.sound.sampled.AudioSystem
 
+import swing._
+import event._
 
 /** Granulator
-  *
-  *
-  */
+ *
+ *
+ **/
 object Granulator extends SimpleSwingApplication{
 
+  val audio = new Audio
+  var sched: Scheduler = null
+
+  /**
+   * The main window for the swing GUI
+   **/
+  def top = new MainFrame {
+    title = "Gnarulator"
+
+    val forward = new Button {
+      text = "forward"
+    }
+
+    val reverse = new Button {
+      text = "reverse"
+    }
+    
+    val slow = new Button {
+      text = "slow"
+    }
+
+    val fast = new Button {
+      text = "fast"
+    }
+    
+    contents = new BoxPanel(Orientation.Vertical) {
+      contents += forward
+      contents += reverse
+      contents += slow
+      contents += fast
+    }
+    listenTo(forward)
+    reactions += {
+      case ButtonClicked(`forward`) => {
+        println("You pressed the button")
+        sched synthesize
+      }
+    }
+  }
 
   /** main
-    *
-    * @param args: Array[String]
-    *
-    */
-  def main(args: Array[String]) {
+   *
+   * @param args: Array[String]
+   *
+   **/
+  override def startup(args: Array[String]) {
     var fileName:String = null
-    var mode:String = "r"
+    var mode:String = "n"
     var grainSize:Int = 70
 
+    // Parse them arguments
     args.foreach { arg =>
       fileName = arg
       //arg match {
@@ -32,8 +74,12 @@ object Granulator extends SimpleSwingApplication{
       //}
     }
 
-    val audio = new Audio
+    // Starts and displays the frame
+    val t = top
+    if (t.size == new Dimension(0,0)) t.pack()
+    t.visible = true
 
+    // Sets up the inputs and outputs for the synthesizer
     val audioInputStream = audio openAudioFile(fileName)
     val audioWorkingStream = AudioSystem getAudioInputStream(audio.AUDIO_FORMAT,audioInputStream)
     val audioByteArray = audio audioStreamToByteArray(audioWorkingStream)
@@ -41,10 +87,7 @@ object Granulator extends SimpleSwingApplication{
     val table = new TableSource(floatArray)
 
     val sampleRate = audio.AUDIO_FORMAT.getSampleRate
-    val sequence = new SingleTableSequence(table, sampleRate, 70, mode)
-
-    val sched = new Scheduler(sequence, audio)
-
-    sched synthesize
+    val sequence = new SingleTableSequence(table, sampleRate, 10, mode)
+    sched = new Scheduler(sequence, audio)
   }
 }
