@@ -7,7 +7,8 @@ import gnar.gran.env.Envelope
 import gnar.gran.Grain
 
 
-abstract class GrainSequence(val source:Source) {
+abstract class GrainSequence(val source:Source, var poolMode:String) {
+  var pmode = poolMode
   def envelope():Envelope
   def grainLength():Int
   def playBackOrder(list:ListBuffer[Grain]):Iterable[Grain]

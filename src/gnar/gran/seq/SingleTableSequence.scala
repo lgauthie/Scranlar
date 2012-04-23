@@ -7,16 +7,16 @@ import gnar.gran.Grain
 import gnar.gran.source._
 import gnar.gran.env._
 
-class SingleTableSequence(source:Source, sampleRate:Float, grainLengthMs:Int = 60, mode:String = "r", poolMode:String = "s")
-  extends GrainSequence(source) {
-
+class SingleTableSequence(source:Source, sampleRate:Float, grainLengthMs:Int = 1000, mode:String = "r", poolMode:String = "s")
+  extends GrainSequence(source, poolMode) {
+  
   def grainLength =  (sampleRate * grainLengthMs/1000).asInstanceOf[Int]
   val env = new SinEnvelope(grainLength)
   def envelope() = env
   
-  /** Plays all of the grains in the list of grains
-    *
-    **/
+  /** 
+   * Plays all of the grains in the list of grains
+   **/
   def playBackOrder(list:ListBuffer[Grain]) = {
     mode match{
       case "n"  => list
@@ -31,11 +31,20 @@ class SingleTableSequence(source:Source, sampleRate:Float, grainLengthMs:Int = 6
   }
 
   def poolOrder() = {
-    poolMode match {
+    println("this.poolMode " + this.poolMode)
+    println("poolMode " + poolMode)
+    println("pmode " + pmode)
+    //println("super.poolMode " + super.poolMode)
+    pmode match {
       case "s" => {
         val end = source.length - grainLength
         val step = grainLength
         0 until end by step/2
+      }
+      case "f" => {
+        val end = source.length - grainLength
+        val step = grainLength
+        0 until end by step*2
       }
       case "n" => {
         val end = source.length - grainLength

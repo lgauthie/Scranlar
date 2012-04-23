@@ -47,10 +47,22 @@ object Granulator extends SimpleSwingApplication{
       contents += slow
       contents += fast
     }
-    listenTo(forward)
+    listenTo(forward, reverse, slow, fast)
     reactions += {
       case ButtonClicked(`forward`) => {
-        println("You pressed the button")
+        sched.sequence.pmode = "n"
+        sched synthesize
+      }
+      case ButtonClicked(`reverse`) => {
+        sched.sequence.pmode = "r"
+        sched synthesize
+      }
+      case ButtonClicked(`slow`) => {
+        sched.sequence.pmode = "s"
+        sched synthesize
+      }
+      case ButtonClicked(`fast`) => {
+        sched.sequence.pmode = "f"
         sched synthesize
       }
     }
@@ -87,7 +99,7 @@ object Granulator extends SimpleSwingApplication{
     val table = new TableSource(floatArray)
 
     val sampleRate = audio.AUDIO_FORMAT.getSampleRate
-    val sequence = new SingleTableSequence(table, sampleRate, 10, mode)
+    val sequence = new SingleTableSequence(table, sampleRate, grainSize, mode)
     sched = new Scheduler(sequence, audio)
   }
 }
