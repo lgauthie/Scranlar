@@ -1,4 +1,7 @@
-kThe start of my granular synthesizer programmed in scala. The language was chosen partly as a learning experience, and partly because I'm interested in the efficiency and dsp capabilities of the jvm but didn't feel like writing in java.
+Scranular
+=========
+
+The start of my granular synthesizer programmed in scala. The language was chosen partly as a learning experience, and partly because I'm interested in the efficiency and dsp capabilities of the jvm but didn't feel like writing in java.
 
 The input file is granulated and then played back.
 
